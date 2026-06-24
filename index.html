@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#05060a" />
+<title>EMF Camp Film Festival~! // Schedule</title>
+<meta name="description" content="Schedule viewer for the EMF Camp 2026 Film Festival." />
+<style>
+  :root{
+    --bg:#05060a;
+    --panel:rgba(16,19,32,.72);
+    --panel-edge:rgba(120,255,180,.18);
+    --green:#39ff14;
+    --green-soft:#7dffb0;
+    --txt:#d8f5e6;
+    --muted:#7c8aa0;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,"JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;font-family:var(--mono);color:var(--txt);
+    background:
+      radial-gradient(1200px 800px at 50% -10%, rgba(57,255,20,.10), transparent 60%),
+      radial-gradient(900px 600px at 100% 20%, rgba(255,46,150,.08), transparent 55%),
+      radial-gradient(900px 600px at 0% 40%, rgba(60,120,255,.08), transparent 55%),
+      var(--bg);
+    min-height:100dvh;overflow-x:hidden;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  /* faint scanlines */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.35;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.18) 2px 3px);
+    mix-blend-mode:multiply;
+  }
+  /* green cursor orb */
+  #orb{
+    position:fixed;top:0;left:0;width:380px;height:380px;margin:-190px 0 0 -190px;border-radius:60%;
+    pointer-events:none;z-index:1;mix-blend-mode:screen;will-change:transform;opacity:0;transition:opacity .4s;
+    background:radial-gradient(circle at center,rgba(57,255,20,.55),rgba(57,255,20,.18) 35%,rgba(57,255,20,0) 70%);
+    filter:blur(6px);
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:22px 16px 80px;position:relative;z-index:3}
+
+  header{margin-bottom:18px}
+  .term{
+    font-size:12px;color:var(--muted);letter-spacing:.04em;margin-bottom:10px;
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  }
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+  .prompt{color:var(--green-soft)}
+  h1{
+    margin:.1em 0 .15em;font-size:clamp(30px,9vw,52px);line-height:1;font-weight:800;letter-spacing:-.02em;
+    background:linear-gradient(90deg,#ff2e96,#ffb000,#39ff14,#21d4ff,#a04bff,#ff2e96);
+    background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:hue 9s linear infinite;
+    filter:drop-shadow(0 0 18px rgba(57,255,20,.25));
+  }
+  @keyframes hue{to{background-position:300% 0}}
+  .blink{display:inline-block;width:.5em;height:1em;background:var(--green);margin-left:.08em;
+    vertical-align:-.08em;animation:bl 1s steps(2) infinite;box-shadow:0 0 10px var(--green)}
+  @keyframes bl{50%{opacity:0}}
+  .sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .sub b{color:var(--green-soft);font-weight:600}
+
+  .tabs{
+    position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow-x:auto;padding:12px 0;margin:14px -16px 6px;
+    padding-left:16px;padding-right:16px;scrollbar-width:none;
+    background:linear-gradient(var(--bg),rgba(5,6,10,.6) 70%,transparent);
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:0 0 auto;border:1px solid var(--panel-edge);background:var(--panel);color:var(--muted);
+    font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 14px;border-radius:11px;cursor:pointer;
+    transition:.18s;white-space:nowrap;backdrop-filter:blur(6px);
+  }
+  .tab small{display:block;font-size:10px;font-weight:500;opacity:.7;letter-spacing:.06em}
+  .tab:hover{color:var(--txt);border-color:rgba(57,255,20,.4)}
+  .tab.active{
+    color:#04130a;border-color:var(--green);
+    background:linear-gradient(180deg,#7dffb0,#39ff14);
+    box-shadow:0 0 18px rgba(57,255,20,.45);
+  }
+
+  .count{font-size:11px;color:var(--muted);margin:4px 2px 14px}
+
+  .card{
+    position:relative;display:grid;grid-template-columns:96px 1fr;gap:14px;
+    border:1px solid var(--panel-edge);border-radius:16px;padding:14px;margin-bottom:14px;
+    background:var(--panel);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    overflow:hidden;transition:border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,#ff2e96,#39ff14,#21d4ff);opacity:.0;transition:.25s}
+  .card:hover{border-color:rgba(57,255,20,.4);box-shadow:0 0 30px rgba(57,255,20,.07)}
+  .card:hover::after{opacity:.9}
+
+  .poster{position:relative;width:96px;aspect-ratio:2/3;border-radius:10px;overflow:hidden;
+    background:linear-gradient(135deg,#11131f,#1c2236);border:1px solid rgba(255,255,255,.06)}
+  .poster img{width:100%;height:100%;object-fit:cover;display:block}
+  .timechip{
+    position:absolute;left:6px;bottom:6px;font-size:10px;font-weight:700;letter-spacing:.03em;
+    color:#04130a;background:linear-gradient(180deg,#7dffb0,#39ff14);padding:3px 6px;border-radius:7px;
+    box-shadow:0 2px 10px rgba(0,0,0,.5)}
+
+  .info{min-width:0}
+  .title{font-size:17px;font-weight:800;line-height:1.15;letter-spacing:-.01em}
+  .title .yr{color:var(--muted);font-weight:600;font-size:13px}
+  .dir{color:var(--green-soft);font-size:12px;margin-top:3px}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 8px}
+  .badge{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 7px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);color:var(--muted)}
+  .badge.cert{color:var(--green);border-color:rgba(57,255,20,.4)}
+  .badge.space{color:#21d4ff;border-color:rgba(33,212,255,.45)}
+  .badge.special{color:#ff9bdc;border-color:rgba(255,46,150,.4)}
+  .tag{color:var(--muted);font-size:12.5px;font-style:italic;line-height:1.4}
+  .oneline{font-size:13px;line-height:1.5;margin-top:8px;color:#cfe9da}
+
+  details{margin-top:8px}
+  summary{list-style:none;cursor:pointer;color:var(--green);font-size:12px;font-weight:700;
+    display:inline-flex;align-items:center;gap:6px;user-select:none}
+  summary::-webkit-details-marker{display:none}
+  summary .chev{transition:.2s}
+  details[open] summary .chev{transform:rotate(90deg)}
+  .full{font-size:13px;line-height:1.6;color:#c2dccf;margin-top:8px}
+  .full b{color:var(--green-soft)}
+  .special-note{margin-top:10px;font-size:12px;line-height:1.45;color:#ffc7ea;
+    border-left:2px solid rgba(255,46,150,.6);padding:6px 0 6px 10px;background:rgba(255,46,150,.06)}
+  .links{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+  .links a{font-size:11px;font-weight:700;text-decoration:none;color:var(--txt);
+    border:1px solid var(--panel-edge);padding:6px 11px;border-radius:9px;transition:.18s}
+  .links a:hover{color:#04130a;background:var(--green);border-color:var(--green);box-shadow:0 0 14px rgba(57,255,20,.4)}
+
+  footer{margin-top:34px;text-align:center;color:var(--muted);font-size:11px;line-height:1.7}
+  footer a{color:var(--green-soft);text-decoration:none}
+  .live{display:inline-flex;align-items:center;gap:6px}
+  .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);
+    animation:pp 1.6s ease-in-out infinite}
+  @keyframes pp{50%{opacity:.3}}
+
+  .loading{color:var(--muted);font-size:13px;padding:30px 0;text-align:center}
+</style>
+</head>
+<body>
+<div id="orb"></div>
+<div class="wrap">
+  <header>
+    <div class="term">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span style="margin-left:4px">~/emf2026/films</span>
+      <span class="prompt">&nbsp;$ touch schedule.json</span>
+    </div>
+    <h1>EMF&nbsp;FILMS<span class="blink"></span></h1>
+    <div class="sub">Electromagnetic Field 2026 &middot; <b>Film Festival</b> &middot; 16&ndash;19 July</div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Filter by day"></nav>
+  <div class="count" id="count"></div>
+  <main id="list"><div class="loading">decrypting schedule&hellip;</div></main>
+
+  <footer>
+    <div style="margin-top:8px"> <a href="https://films.emfcamp.org/" target="_blank" rel="noopener">films.emfcamp.org</a> &middot; posters &copy; their respective owners</div>
+    <div style="margin-top:6px;opacity:.6">GO WATCH A MOVIE!!! :D</div>
+  </footer>
+</div>
+
+<script>
+const SCHEDULE_URL = "https://films.emfcamp.org/schedule.json";
+const IMG_BASE = "https://films.emfcamp.org/img/2026-06/";
+const DAY_ORDER = ["Thursday","Friday","Saturday","Sunday"];
+
+const FALLBACK = /*FALLBACK_JSON*/{"schemaVersion":1,"films":[{"display":true,"slug":"apollo11","title":"Apollo 11","director":"Todd Douglas Miller","year":2019,"certificate":"E","poster":"https://www.imdb.com/title/tt8760684/mediaviewer/rm937584896/","image":"poster_apollo11.jpg","starring":["Neil Armstrong","Buzz Aldrin","Mike Collins","Deke Slayton"],"precis":{"full":"<b>Showing on the 57th anniversary of the Apollo 11 launch.</b><br/><br/>Created from thousands of hours of footage, much of which has never been seen before, this cinematic masterpiece covers the Apollo 11 mission from launch to splashdown. By omitting narration the misson unfolds through stunning visuals and the words of the people who were there, the lovingly restored and assembled footage telling the story. It is an absolute must on a big screen.<br/><br/>The film will be introduced by Stephen Slater, a world-renowned NASA archivist and producer on the movie. Following the screening Stephen will be joined by Empire Magazine's Helen O'Hara for a discussion on the film and the lasting impact of the Apollo missions.","oneLine":"A visually stunning look at the Apollo 11 mission to land on the moon led by commander Neil Armstrong and pilots Buzz Aldrin and Mike Collins."},"showing":{"timestamp":"2026-07-16T19:00:00+01:00","text":"16th July 19:00","day":"Thursday","session":"pm"},"imdb":"https://www.imdb.com/title/tt8760684/","trailer":"https://www.imdb.com/video/vi4178360857/","runTime":{"minutes":93,"text":"1h 33"},"spaceThemed":true},{"display":false,"slug":"heartofneon","title":"Heart Of Neon","director":"Paul Docherty","year":2025,"certificate":"E","poster":"https://www.imdb.com/title/tt9618750/mediaviewer/rm2664737794/","image":"poster_heart.jpg","starring":["Jeff Minter","Ivor Zorzin","Shahid Ahmad"],"precis":{"full":"Jeff Minter is an exceptional video game developer who, for decades, has remained independent in an industry where corporations dictate the terms. HEART OF NEON charts Jeff's 40-year career from pioneer to legend, mapping the territory Jeff traversed, becoming a beacon to everyone drawn to the same purity he admires in classic gaming, drawn to the beautiful lights.<br/><br/>Director Paul Docherty has recorded a special introduction to the film exclusively for EMF attendees.","oneLine":"The remarkable history of video games pioneer Jeff Minter.","special":"Pre-Recorded Introduction By Director Paul Docherty"},"showing":{"timestamp":"2026-07-16T21:00:00+01:00","text":"16th July 21:00","day":"Thursday","session":"pm"},"imdb":"https://www.imdb.com/title/tt9618750/","trailer":"https://www.youtube.com/watch?v=j39KsTkedCs","runTime":{"minutes":95,"text":"1h 35"},"spaceThemed":false},{"display":true,"slug":"spinaltap","title":"This Is Spinal Tap","director":"Rob Reiner","year":1984,"certificate":"15","poster":"https://www.imdb.com/title/tt0088258/mediaviewer/rm4265401600/","image":"poster_spinal.jpg","starring":["Michael McKean","Christopher Guest","Harry Shearer","Rob Reiner"],"precis":{"full":"In our first of two films celebrating the life and works of Rob Reiner, we join hapless UK rockers Spinal Tap on a comeback tour of America where everything that could go wrong, does go wrong. Endlessly quotable, this documentary (sorry, <i>rockumentary</i>) put Reiner on the map and gave birth to a now-legendary band.","oneLine":"A spoof documentary of a hapless UK rock band"},"showing":{"timestamp":"2026-07-16T21:30:00+01:00","text":"16th July 21:30","day":"Thursday","session":"pm"},"imdb":"https://www.imdb.com/title/tt0088258/","trailer":"https://www.youtube.com/watch?v=HsFm6Yk_HkE","runTime":{"minutes":82,"text":"1h 22"},"spaceThemed":false},{"display":true,"slug":"walle","title":"WALL-E","director":"Andrew Stanton","year":2008,"certificate":"U","poster":"https://www.imdb.com/title/tt0910970/mediaviewer/rm1659211008/","image":"poster_walle.jpg","starring":["Ben Burtt","Elissa Knight","Jeff Garlin","Fred Willard"],"precis":{"full":"In a morning special presentation for our younger attendees (although all are welcome), we spend Friday morning with WALL-E, one of Pixar's most-loved features. In a future where humans have temporarily abandoned Earth, a trash-compacting robot falls in love with a flying droid and helps her on her quest to restore hope to mankind. Charming animation and solid story.","oneLine":"In a future where humans have temporarily abandoned Earth, a trash-compacting robot falls in love with a flying droid and helps her on her quest to restore hope to mankind."},"showing":{"timestamp":"2026-07-17T08:00:00+01:00","text":"17th July 08:00","day":"Friday","session":"am"},"imdb":"https://www.imdb.com/title/tt0910970/","trailer":"https://www.imdb.com/video/vi3450929433/","runTime":{"minutes":98,"text":"1h 38"},"spaceThemed":true},{"display":true,"slug":"hackers","title":"Hackers","director":"Iain Softley","year":1995,"certificate":"12","poster":"https://www.imdb.com/title/tt0113243/mediaviewer/rm3977202176/","image":"poster_hackers.jpg","starring":["Jonny Lee Miller","Angelina Jolie","Matthew Lillard","Jesse Bradford","Peter Y. Kim","Darren Lee","Lorraine Bracco","Ethan Browne","Renoly Santiago","Laurence Mason","Alberta Watson","Fisher Stevens"],"precis":{"full":"How could we not show this? Do we even need to write this blurb? Legendary hacker Zero Cool and his friends have been framed by The Plague, who has unleashed a computer virus that could cause an environmental disaster. Pursued by the Secret Service, the gang try to gather the evidence to take The Plague down and stop the virus from unleashing havoc. A bumper-fest of hacking, car chases and double-crossing that has become lore in geek culture. Endlessly quotable and an EMF tradition.<br/><br>We welcome back director Iain Softley to introduce the film. \"EMF is the spiritual home of Hackers\" - Iain Softley","oneLine":"In this geek classic hackers are blamed for making a virus that will capsize five oil tankers.","special":"Introduction By Director Iain Softley"},"showing":{"timestamp":"2026-07-17T19:00:00+01:00","text":"17th July 19:00","day":"Friday","session":"pm"},"imdb":"https://www.imdb.com/title/tt0113243/","trailer":"https://www.youtube.com/watch?v=Rn2cf_wJ4f4","runTime":{"minutes":101,"text":"1h 41"},"spaceThemed":false},{"display":true,"slug":"2001","title":"2001: A Space Odyssey","director":"Stanley Kubrick","year":1968,"certificate":"U","poster":"https://www.imdb.com/title/tt0062622/mediaviewer/rm3872284416/","image":"poster_2001.jpg","starring":["Keir Dullea","Gary Lockwood","William Sylvester"],"precis":{"full":"Kubrick's masterpiece was a must-have for a space-themed EMF. '2001: A Space Odyssey' stands as a visually stunning masterpiece that creates overwhelming cosmic wonder through breathtaking cinematography and ambitious scope spanning human evolution. The thought-provoking narrative invites personal interpretation about consciousness and humanity's place in the universe. It's got HAL in it too.","oneLine":"When a mysterious artefact is uncovered on the Moon, a spacecraft manned by two humans and one supercomputer is sent to Jupiter to find its origins."},"showing":{"timestamp":"2026-07-17T22:00:00+01:00","text":"17th July 22:00","day":"Friday","session":"pm"},"imdb":"https://www.imdb.com/title/tt0062622/","trailer":"https://www.imdb.com/video/vi2388329497/","runTime":{"minutes":149,"text":"2h 29"},"spaceThemed":true},{"display":true,"slug":"grand","title":"Wallace & Gromit","director":"Nick Park","year":1989,"certificate":"U","poster":"https://www.imdb.com/title/tt0104361/mediaviewer/rm3521517057/","image":"poster_grand_wrongtrousers.jpg","starring":["Peter Sallis"],"precis":{"full":"Two of Aardman's finest. Nick Park's first outing with Wallace & Gromit sees them heading to the moon to top-up their cheese supplies. There they meet a little lonely robot and help it find happiness. And cheese.<br/><br/>Following that, The Wrong Trousers is our first encounter with super-villan Feathers McGraw. Have you seen this chicken? Worth it for the train chase alone.","oneLine":"Two of Aardman's most loved shorts, with Wallace the inventor and his long-suffering pooch, Gromit.","special":"A Grand Day Out & The Wrong Trousers Double-Bill"},"showing":{"timestamp":"2026-07-18T08:30:00+01:00","text":"18th July 08:30","day":"Saturday","session":"am"},"imdb":"https://www.imdb.com/title/tt0104361/","trailer":"https://www.youtube.com/watch?v=ablYsAGtuSM","runTime":{"minutes":60,"text":"1h 00"},"spaceThemed":false},{"display":true,"slug":"apollo13","title":"Apollo 13","director":"Ron Howard","year":1995,"certificate":"U","poster":"https://www.imdb.com/title/tt0112384/mediaviewer/rm635378177/","image":"poster_apollo13.jpg","starring":["Tom Hanks","Bill Paxton","Kevin Bacon"],"precis":{"full":"The thrilling true story of the Apollo mission that very nearly never made it home. Tom Hanks excels as Jim Lovell, trapped thousands of miles away in a barely-working spaceship. Ron Howard builds the tension to fever-point, even though we know the outcome.<br/><br/>We are proud to present this movie on an original 35mm print.","oneLine":"The dramatised story of Apollo 13, the mission that nearly ended in disaster.","special":"Presented On 35mm Film"},"showing":{"timestamp":"2026-07-18T19:00:00+01:00","text":"18th July 19:00","day":"Saturday","session":"pm"},"imdb":"https://www.imdb.com/title/tt0112384/","trailer":"https://www.imdb.com/video/vi3653290009/","runTime":{"minutes":140,"text":"2h 20"},"spaceThemed":true},{"display":true,"slug":"contact","title":"Contact","director":"Robert Zemeckis","year":1997,"certificate":"12","poster":"https://www.imdb.com/title/tt0118884/mediaviewer/rm3416921088/","image":"poster_contact.jpg","starring":["Jodie Foster","Matthew McConaughey"],"precis":{"full":"This film was one of our most requested for this year's space theme. Contact is adaptation of Carl Sagan's book on how we may encounter alien life. A message is received from deep space with instructions for a new type of craft. What follows is politics, lies and wonder. The cinematography alone make this worth a watch. How did they shoot the scene with the bathroom cabinet?","oneLine":"When a message is received from deep space, a young scientist is given the chance to be the first make contact."},"showing":{"timestamp":"2026-07-18T22:00:00+01:00","text":"18th July 22:00","day":"Saturday","session":"pm"},"imdb":"https://www.imdb.com/title/tt0118884/","trailer":"https://www.imdb.com/video/vi2509177369/","runTime":{"minutes":150,"text":"2h 30"},"spaceThemed":true},{"display":true,"slug":"dragon","title":"How To Train Your Dragon","director":"Dean DeBlois, Chris Sanders","year":2010,"certificate":"U","poster":"https://www.imdb.com/title/tt0892769/mediaviewer/rm2210040832/","image":"poster_dragon.jpg","starring":["Jay Baruchel","Gerard Butler","Christopher Mintz-Plasse"],"precis":{"full":"Our final morning film is a kid's classic and if you haven't seen the original animated version, come join us. After encountering an injured dragon, Hiccup the viking discovers that their fire-breathing enemies are misunderstood and an unlikely friendship emerges. Great comedy and the cutest darn dragon you've ever seen. Presented on an original 35mm print.","oneLine":"A young viking's encounter with an injured dragon results in an unlikely friendship.","special":"Presented On 35mm Film"},"showing":{"timestamp":"2026-07-19T08:00:00+01:00","text":"19th July 08:00","day":"Sunday","session":"am"},"imdb":"https://www.imdb.com/title/tt0892769/","trailer":"https://www.imdb.com/video/vi3870033177/","runTime":{"minutes":98,"text":"1h 38"},"spaceThemed":false},{"display":true,"slug":"princessbride","title":"The Princess Bride","director":"Rob Reiner","year":1987,"certificate":"U","poster":"https://www.imdb.com/title/tt0093779/","image":"poster_princessbride.jpg","starring":["Cary Elwes","Mandy Patinkin","Robin Wright"],"precis":{"full":"Hello. Our name is Films Team. You've attended our screening, prepare to see a movie. This special tribute to the late Rob Reiner is an outright classic. Despite it's fairytale exterior, it's full of laughs, endlessly quotable lines, pythonesque moments and of course <i>that</i> speech. Come and join in with all best lines. Missing this? INCONCEIVABLE!","oneLine":"A mapcap fairytale adventure with countless cameos, quotable lines and general silliness."},"showing":{"timestamp":"2026-07-19T20:15:00+01:00","text":"19th July 20:15","day":"Sunday","session":"pm"},"imdb":"https://www.imdb.com/title/tt0093779/","trailer":"https://www.imdb.com/video/vi1571095833/","runTime":{"minutes":101,"text":"1h 41"},"spaceThemed":false},{"display":true,"slug":"moon","title":"MOON","director":"Duncan Jones","year":2009,"certificate":"15","poster":"https://www.imdb.com/title/tt1182345/mediaviewer/rm1680837376/","image":"poster_moon.jpg","starring":["Sam Rockwell"],"precis":{"full":"When Sam Bell signs up for a three-year mining contract working on Sarang Moon base, he assumes he is alone. He is wrong. Beautifully shot by Duncan Jones and with thumping music by Clint Mansell, Moon is dark, claustrophobic and at times surreal.","oneLine":"Sam Bell encounters the most terrifying thing on a Moon base. Himself."},"showing":{"timestamp":"2026-07-19T22:00:00+01:00","text":"19th July 22:00","day":"Sunday","session":"pm"},"imdb":"https://www.imdb.com/title/tt1182345/","trailer":"https://www.imdb.com/video/vi1265108249/","runTime":{"minutes":97,"text":"1h 37"},"spaceThemed":true}]};
+
+const posterUrl = f => IMG_BASE + String(f.image||"").replace(/[^a-z0-9_.-]/gi,"").replace(/\.[a-z]+$/i,"") + "-640w.jpeg";
+const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const time = ts => new Date(ts).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
+
+const safeUrl = u => { try{ const x=new URL(u,location.href); return /^https?:$/.test(x.protocol)?x.href:""; }catch(e){ return ""; } };
+const ALLOWED_TAGS = new Set(["B","I","EM","STRONG","BR","U","P"]);
+function sanitizeHtml(html){
+  const body = new DOMParser().parseFromString(String(html||""),"text/html").body;
+  const walk = node => {
+    const frag = document.createDocumentFragment();
+    node.childNodes.forEach(ch=>{
+      if(ch.nodeType===3) frag.appendChild(document.createTextNode(ch.nodeValue));
+      else if(ch.nodeType===1 && ALLOWED_TAGS.has(ch.tagName)){
+        const el=document.createElement(ch.tagName); el.appendChild(walk(ch)); frag.appendChild(el);
+      } else if(ch.nodeType===1){ frag.appendChild(walk(ch)); }
+    });
+    return frag;
+  };
+  const div=document.createElement("div"); div.appendChild(walk(body)); return div.innerHTML;
+}
+
+let FILMS=[], current="ALL";
+
+function render(){
+  const list=document.getElementById("list");
+  const films=FILMS.filter(f=>current==="ALL"||f.showing?.day===current);
+  document.getElementById("count").textContent =
+    "// " + films.length + " screening" + (films.length===1?"":"s") +
+    (current==="ALL"?" across the weekend":" on "+current);
+
+  list.innerHTML = films.map(f=>{
+    const s=f.showing||{};
+    const special=f.precis?.special;
+    return `<article class="card">
+      <div class="poster">
+        <img loading="lazy" alt="${esc(f.title)} poster" src="${esc(posterUrl(f))}" onerror="this.style.visibility='hidden'">
+        <span class="timechip">${esc(time(s.timestamp))}</span>
+      </div>
+      <div class="info">
+        <div class="title">${esc(f.title)} <span class="yr">${f.year||""}</span></div>
+        <div class="dir">dir. ${esc(f.director||"—")}</div>
+        <div class="badges">
+          <span class="badge cert">${esc(f.certificate||"?")}</span>
+          <span class="badge">${esc(f.runTime?.text||"")}</span>
+          <span class="badge">${esc(s.text||s.day||"")}</span>
+          ${f.spaceThemed?'<span class="badge space">🚀 space</span>':''}
+          ${special?'<span class="badge special">★ special</span>':''}
+        </div>
+        ${f.precis?.oneLine?`<div class="oneline">${esc(f.precis.oneLine)}</div>`:''}
+        ${f.precis?.full?`<details>
+          <summary><span class="chev">▸</span> read more</summary>
+          <div class="full">${sanitizeHtml(f.precis.full)}</div>
+          ${special?`<div class="special-note">★ ${esc(special)}</div>`:''}
+        </details>`:''}
+        <div class="links">
+          ${safeUrl(f.imdb)?`<a href="${esc(safeUrl(f.imdb))}" target="_blank" rel="noopener">IMDb ↗</a>`:''}
+          ${safeUrl(f.trailer)?`<a href="${esc(safeUrl(f.trailer))}" target="_blank" rel="noopener">▶ trailer</a>`:''}
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function buildTabs(){
+  const tabs=document.getElementById("tabs");
+  const days=DAY_ORDER.filter(d=>FILMS.some(f=>f.showing?.day===d));
+  const mk=(id,label,sub)=>`<button class="tab${id===current?' active':''}" data-day="${id}">${label}${sub?`<small>${sub}</small>`:''}</button>`;
+  tabs.innerHTML = mk("ALL","ALL","16–19 Jul") + days.map(d=>{
+    const n=FILMS.filter(f=>f.showing?.day===d).length;
+    return mk(d,d.slice(0,3).toUpperCase(),n+" film"+(n===1?"":"s"));
+  }).join("");
+  tabs.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+    current=b.dataset.day;
+    tabs.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+}
+
+function boot(data){
+  FILMS=(data.films||[])
+    .filter(f=>f.display!==false && f.showing)
+    .sort((a,b)=>new Date(a.showing.timestamp)-new Date(b.showing.timestamp));
+  buildTabs();
+  render();
+}
+
+boot(FALLBACK);
+const ctrl = new AbortController();
+const timeout = setTimeout(()=>ctrl.abort(), 5000);
+fetch(SCHEDULE_URL,{signal:ctrl.signal})
+  .then(r=>{if(!r.ok)throw 0;return r.json();})
+  .then(d=>boot(d))
+  .catch(()=>{
+    document.getElementById("src").innerHTML='<span class="pulse" style="background:#ffbd2e;box-shadow:0 0 8px #ffbd2e"></span> cached snapshot';
+  })
+  .finally(()=>clearTimeout(timeout));
+
+/* glowy green orb */
+(function(){
+  if(!matchMedia("(pointer:fine)").matches) return;
+  const orb=document.getElementById("orb");
+  let tx=innerWidth/2,ty=innerHeight/2,x=tx,y=ty,shown=false;
+  addEventListener("mousemove",e=>{
+    tx=e.clientX;ty=e.clientY;
+    if(!shown){shown=true;orb.style.opacity=1;}
+  });
+  addEventListener("mouseout",e=>{if(!e.relatedTarget){orb.style.opacity=0;shown=false;}});
+  (function loop(){
+    x+=(tx-x)*0.14; y+=(ty-y)*0.14;
+    orb.style.transform=`translate(${x}px,${y}px)`;
+    requestAnimationFrame(loop);
+  })();
+})();
+</script>
+</body>
+</html>
