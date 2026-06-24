@@ -196,6 +196,37 @@ function sanitizeHtml(html){
   const div=document.createElement("div"); div.appendChild(walk(body)); return div.innerHTML;
 }
 
+// ics download
+const calLoc = "EMF Camp Film Festival";
+const calEnd = f => new Date(+new Date(f.showing.timestamp) + (f.runTime?.minutes||120)*60000);
+const utcStamp = d => new Date(d).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,""); // -> 20260716T180000Z
+function calDetails(f){
+  const p=[];
+  if(f.precis?.oneLine) p.push(f.precis.oneLine);
+  if(f.precis?.special) p.push("★ "+f.precis.special);
+  p.push(`dir. ${f.director||"?"} · ${f.runTime?.text||""} · cert ${f.certificate||"?"}`);
+  if(safeUrl(f.imdb)) p.push("IMDb: "+safeUrl(f.imdb));
+  if(safeUrl(f.trailer)) p.push("Trailer: "+safeUrl(f.trailer));
+  return p.join("\n\n");
+}
+function icsFile(f){
+  const e = t => String(t).replace(/\\/g,"\\\\").replace(/[;,]/g,m=>"\\"+m).replace(/\r?\n/g,"\\n");
+  const fold = l => l.length<=74 ? l : l.match(/.{1,73}/g).join("\r\n "); // RFC5545 line folding
+  return [
+    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//EMF Films//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    "UID:"+(f.slug||utcStamp(f.showing.timestamp))+"@emf-films-2026",
+    "DTSTAMP:"+utcStamp(Date.now()),
+    "DTSTART:"+utcStamp(f.showing.timestamp),
+    "DTEND:"+utcStamp(calEnd(f)),
+    "SUMMARY:"+e(`${f.title} (${f.year||""})`),
+    "DESCRIPTION:"+e(calDetails(f)),
+    "LOCATION:"+e(calLoc),
+    "END:VEVENT","END:VCALENDAR"
+  ].map(fold).join("\r\n");
+}
+const icsHref = f => "data:text/calendar;charset=utf-8,"+encodeURIComponent(icsFile(f));
+
 let FILMS=[], current="ALL";
 
 function render(){
@@ -232,6 +263,7 @@ function render(){
         <div class="links">
           ${safeUrl(f.imdb)?`<a href="${esc(safeUrl(f.imdb))}" target="_blank" rel="noopener">IMDb ↗</a>`:''}
           ${safeUrl(f.trailer)?`<a href="${esc(safeUrl(f.trailer))}" target="_blank" rel="noopener">▶ trailer</a>`:''}
+          <a href="${esc(icsHref(f))}" download="${esc(f.slug||'screening')}.ics">📅 export .ics</a>
         </div>
       </div>
     </article>`;
@@ -269,7 +301,8 @@ fetch(SCHEDULE_URL,{signal:ctrl.signal})
   .then(r=>{if(!r.ok)throw 0;return r.json();})
   .then(d=>boot(d))
   .catch(()=>{
-    document.getElementById("src").innerHTML='<span class="pulse" style="background:#ffbd2e;box-shadow:0 0 8px #ffbd2e"></span> cached snapshot';
+    const el=document.getElementById("src");
+    if(el) el.innerHTML='<span class="pulse" style="background:#ffbd2e;box-shadow:0 0 8px #ffbd2e"></span> cached snapshot';
   })
   .finally(()=>clearTimeout(timeout));
 
